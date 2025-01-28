@@ -506,13 +506,28 @@ const TestUpload = ({ onSuccess }) => {
         <FormControl fullWidth required sx={{ mb: 2 }}>
           <InputLabel>Faculty</InputLabel>
           <Select value={faculty} onChange={(e) => setFaculty(e.target.value)}>
-            <MenuItem value="Faculty 1">Faculty 1</MenuItem>
-            <MenuItem value="Faculty 2">Faculty 2</MenuItem>
-            <MenuItem value="Faculty 3">Faculty 3</MenuItem>
-            <MenuItem value="Faculty 4">Faculty 4</MenuItem>
-            <MenuItem value="Faculty 5">Faculty 5</MenuItem>
-            <MenuItem value="Faculty 6">Faculty 6</MenuItem>
-            <MenuItem value="Faculty 7">Faculty 7</MenuItem>
+            <MenuItem value="Faculty of Applied Sciences">
+              Faculty of Applied Sciences
+            </MenuItem>
+            <MenuItem value="Faculty of Computing">
+              Faculty of Computing
+            </MenuItem>
+            <MenuItem value="Faculty of Agricultural Sciences">
+              Faculty of Agricultural Sciences
+            </MenuItem>
+            <MenuItem value="Faculty of Geomatics">
+              Faculty of Geomatics
+            </MenuItem>
+            <MenuItem value="Faculty of Management Studies">
+              Faculty of Management Studies
+            </MenuItem>
+            <MenuItem value="Faculty of Social Sciences and Languages">
+              Faculty of Social Sciences and Languages
+            </MenuItem>
+            <MenuItem value="Faculty of Technology">
+              Faculty of Technology
+            </MenuItem>
+            <MenuItem value="Faculty of Medicine">Faculty of Medicine</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth required sx={{ mb: 2 }}>

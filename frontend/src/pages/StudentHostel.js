@@ -192,6 +192,7 @@ const StudentHostel = () => {
 
 export default StudentHostel;
 */
+
 import React, { useEffect, useState } from "react";
 import {
   Grid,
@@ -211,6 +212,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TestUpload from "../components/HostelApplyForm";
+import { color } from "@mui/system";
+import { motion } from "framer-motion";
 
 const StudentHostel = () => {
   const [hostels, setHostels] = useState(null);
@@ -219,6 +222,7 @@ const StudentHostel = () => {
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { user } = useAuthContext();
+
   const role = user?.category;
 
   useEffect(() => {
@@ -259,6 +263,7 @@ const StudentHostel = () => {
       <div
         style={{
           padding: "20px",
+          paddingTop: "0px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -272,28 +277,50 @@ const StudentHostel = () => {
                 variant="contained"
                 startIcon={<SendIcon />}
                 sx={{
-                  mb: 2,
-                  background: "linear-gradient(90deg, #7c0e0e, #8b0000)",
-                  color: "#ffffff",
-                  borderRadius: "30px",
-                  padding: "10px 20px",
-                  fontWeight: "bold",
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                  transition: "transform 0.1s ease-in-out",
+                  margin: "0px",
+                  padding: "8px 16px", // Simple padding for better spacing
+                  fontSize: "1rem", // Standard font size
+                  fontWeight: "500", // Semi-bold for clarity without being too heavy
+                  backgroundColor: "rgb(81, 1, 2)", // Deep red background
+                  color: "white", // White text for good contrast
+                  borderRadius: "4px", // Slightly rounded corners
+                  textTransform: "none", // Preserve the button text's casing
+                  border: "none", // No border for a cleaner look
                   "&:hover": {
-                    background: "linear-gradient(90deg, #8b0000, #7c0e0e)",
-                    transform: "scale(1.05)",
-                  },
-                  "&:active": {
-                    transform: "scale(0.95)",
+                    backgroundColor: "rgb(81, 1, 2)", // Keep same color on hover for simplicity
                   },
                 }}
               >
                 Apply for Hostel
               </Button>
             )}
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 220 }}>
-              <InputLabel sx={{ fontSize: "0.9rem" }}>
+            <FormControl
+              variant="outlined"
+              size="small"
+              sx={{
+                minWidth: 220,
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderWidth: "2px", // Make the outline bolder
+                    borderColor: "rgb(81, 1, 2)", // Deep red color for the outline
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgb(81, 1, 2)", // Outline color when hovered
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgb(81, 1, 2)", // Focused outline color
+                    borderWidth: "2px", // Ensures the border stays bold when focused
+                  },
+                },
+              }}
+            >
+              <InputLabel
+                sx={{
+                  fontSize: "0.9rem",
+                  color: "rgb(81, 1, 2)",
+                  fontWeight: "bold",
+                }}
+              >
                 Filter by Gender
               </InputLabel>
               <Select
@@ -315,55 +342,78 @@ const StudentHostel = () => {
           {filteredHostels &&
             filteredHostels.map((hostel) => (
               <Grid item xs={12} sm={6} md={4} key={hostel._id}>
-                <Paper
-                  elevation={3}
-                  sx={{
-                    padding: "20px",
-                    borderRadius: "10px",
-                    backgroundColor: "#f9f9f9",
-                  }}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{ fontWeight: "bold", mb: 1 }}
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      padding: "20px",
+                      borderRadius: "10px",
+                      backgroundColor: "#f9f9f9",
+                    }}
                   >
-                    {hostel.name}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", alignItems: "center", mb: 0.5 }}
-                  >
-                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    Location: {hostel.location}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", alignItems: "center", mb: 0.5 }}
-                  >
-                    {hostel.gender === "Male" ? (
-                      <MaleIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    ) : (
-                      <FemaleIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    )}
-                    Gender: {hostel.gender}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
-                    <PersonIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    Warden: {hostel.warden}
-                  </Typography>
-                </Paper>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{ fontWeight: "bold", mb: 1 }}
+                    >
+                      {hostel.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center", mb: 0.5 }}
+                    >
+                      <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                      Location: {hostel.location}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center", mb: 0.5 }}
+                    >
+                      {hostel.gender === "Male" ? (
+                        <MaleIcon fontSize="small" sx={{ mr: 0.5 }} />
+                      ) : (
+                        <FemaleIcon fontSize="small" sx={{ mr: 0.5 }} />
+                      )}
+                      Gender: {hostel.gender}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      <PersonIcon fontSize="small" sx={{ mr: 0.5 }} />
+                      Warden: {hostel.warden}
+                    </Typography>
+                  </Paper>
+                </motion.div>
               </Grid>
             ))}
         </Grid>
       ) : (
         <div>
-          <Button onClick={handleBackClick} sx={{ margin: "0px" }}>
+          <Button
+            onClick={handleBackClick}
+            sx={{
+              margin: "0px",
+              padding: "8px 16px", // Simple padding for better spacing
+              fontSize: "1rem", // Standard font size
+              fontWeight: "500", // Semi-bold for clarity without being too heavy
+              backgroundColor: "white", // Deep red background
+              color: "rgb(81, 1, 2)", // White text for good contrast
+              borderRadius: "4px", // Slightly rounded corners
+              textTransform: "none", // Preserve the button text's casing
+              border: "none", // No border for a cleaner look
+              "&:hover": {
+                backgroundColor: "grey", // Keep same color on hover for simplicity
+              },
+            }}
+          >
             Back to Hostel Details
           </Button>
+
           <TestUpload onSuccess={handleFormSubmitSuccess} />
         </div>
       )}

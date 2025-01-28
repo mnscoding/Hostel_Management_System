@@ -16,6 +16,7 @@ import AboutUs from "./pages/AboutUs";
 import Complaint from "./pages/Complaints";
 import Staff from "./pages/Staff";
 import AdminDashboard from "./pages/AdminDashboard";
+import NewAdminDashboard from "./pages/NewAdminDashBoard";
 import Students from "./pages/Students";
 import Hostel from "./pages/Hostel";
 import StudentHostel from "./pages/StudentHostel";
@@ -41,7 +42,7 @@ function App() {
               path="/"
               element={
                 user && user.category === "Admin" ? (
-                  <AdminDashboard />
+                  <NewAdminDashboard />
                 ) : (
                   <NewHome />
                 )

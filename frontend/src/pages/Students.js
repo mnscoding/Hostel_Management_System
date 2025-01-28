@@ -11,7 +11,9 @@ const Students = () => {
   };
   return (
     <div className="main-content">
-      <Button onClick={handleBack}>BACK</Button>
+      <Button sx={{ mt: 0 }} onClick={handleBack}>
+        BACK
+      </Button>
       <div>
         <StudentDetail />
       </div>

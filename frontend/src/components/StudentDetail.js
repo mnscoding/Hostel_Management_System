@@ -1016,6 +1016,8 @@ const TestUploads = () => {
 };
 
 export default TestUploads;*/
+
+/*2025
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -1226,7 +1228,7 @@ const TestUploads = () => {
         </Grid>
       )}
 
-      {/* Dialog for Editing Student */}
+      
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Edit Student Details</DialogTitle>
         <DialogContent>
@@ -1370,6 +1372,368 @@ const TestUploads = () => {
           </Button>
           <Button onClick={handleUpdate} color="primary">
             Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+};
+
+export default TestUploads;*/
+
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  IconButton,
+  DialogContentText,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { motion } from "framer-motion";
+import colors from "../config/colors";
+
+const TestUploads = () => {
+  const [uploads, setUploads] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openDetailView, setOpenDetailView] = useState(false);
+  const [currentStudent, setCurrentStudent] = useState(null);
+
+  useEffect(() => {
+    const fetchUploads = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/students");
+        if (!response.ok) throw new Error("Failed to fetch uploads");
+        const data = await response.json();
+        setUploads(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUploads();
+  }, []);
+
+  const filteredUploads = uploads.filter(
+    (upload) =>
+      upload.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      upload.regNo.includes(searchQuery)
+  );
+
+  const handleEditClick = (student) => {
+    setCurrentStudent(student);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setCurrentStudent(null);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/students/${currentStudent._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(currentStudent),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to update student");
+
+      setUploads((prevUploads) =>
+        prevUploads.map((upload) =>
+          upload._id === currentStudent._id ? currentStudent : upload
+        )
+      );
+
+      handleCloseDialog();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDelete = async (studentId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this student?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/students/${studentId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete student");
+
+      setUploads((prevUploads) =>
+        prevUploads.filter((upload) => upload._id !== studentId)
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleViewDetails = (student) => {
+    setCurrentStudent(student);
+    setOpenDetailView(true);
+  };
+
+  const handleCloseDetailView = () => {
+    setOpenDetailView(false);
+    setCurrentStudent(null);
+  };
+
+  return (
+    <Box sx={{ maxWidth: 1000, margin: "auto", mt: 0 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600, // Bold but not too heavy
+            fontSize: "2rem", // Slightly larger font for prominence
+            color: "#333", // Dark color for better readability
+            letterSpacing: "0.5px", // Subtle letter spacing for a cleaner appearance
+            lineHeight: 1.3, // Adjusted line height for better spacing
+            marginBottom: "1.5rem",
+            mt: 0, // Spacing below the title
+          }}
+        >
+          Students
+        </Typography>
+        <TextField
+          variant="outlined"
+          placeholder="Search by name or reg no..."
+          size="small"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{
+            width: "250px",
+            borderRadius: 2,
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: colors.primary,
+                borderWidth: "3px",
+              },
+              "&:hover fieldset": {
+                borderColor: "darkred",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: colors.primary,
+                borderWidth: "3px",
+              },
+            },
+            "& input": {
+              color: "black",
+            },
+          }}
+        />
+      </Box>
+
+      {loading ? (
+        <Box sx={{ textAlign: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Typography color="error" sx={{ mt: 4 }}>
+          {error}
+        </Typography>
+      ) : (
+        <Grid container spacing={2}>
+          {filteredUploads.map((upload) => (
+            <Grid item xs={12} key={upload._id}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Card
+                  variant="outlined"
+                  sx={{
+                    mb: 2,
+                    borderRadius: 1,
+                    boxShadow: 1,
+                    display: "flex",
+                    background: "linear-gradient(145deg, #f3f4f6, #e5e7eb)",
+                    borderLeft: "20px solid #6e2026",
+                  }}
+                >
+                  <CardContent sx={{ flex: 1 }}>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography variant="body1">
+                        <b>Reg. No:</b> {upload.regNo} &nbsp; <b>Name:</b>{" "}
+                        {upload.name}
+                      </Typography>
+                      <Box>
+                        <IconButton onClick={() => handleDelete(upload._id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton onClick={() => handleEditClick(upload)}>
+                          <EditIcon />
+                        </IconButton>
+                        <Button
+                          variant="outlined"
+                          style={{
+                            borderColor: colors.primary,
+                            color: colors.secondary,
+                          }}
+                          onClick={() => handleViewDetails(upload)}
+                          sx={{ ml: 1 }}
+                        >
+                          View Details
+                        </Button>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* Dialog for Editing Student */}
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
+        <DialogTitle>Edit Student Details</DialogTitle>
+        <DialogContent>
+          {currentStudent && (
+            <Box
+              component="table"
+              sx={{ width: "100%", borderCollapse: "collapse" }}
+            >
+              <tbody>
+                {[
+                  {
+                    label: "Name",
+                    value: "name",
+                  },
+                  { label: "Registration No", value: "regNo" },
+                  { label: "Gender", value: "gender" },
+                  { label: "Registering Year", value: "registeringYear" },
+                  { label: "Hostel", value: "hostel" },
+                  { label: "Faculty", value: "faculty" },
+                  { label: "Department", value: "department" },
+                  { label: "Address", value: "address" },
+                  { label: "Contact No", value: "contactNo" },
+                  { label: "Email", value: "email" },
+                  { label: "Parent Contact No", value: "parentNo" },
+                ].map(({ label, value }) => (
+                  <tr key={value}>
+                    <td
+                      style={{
+                        padding: "8px",
+                        fontWeight: "bold",
+                        borderBottom: "1px solid #ddd",
+                      }}
+                    >
+                      {label}:
+                    </td>
+                    <td
+                      style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
+                    >
+                      <TextField
+                        fullWidth
+                        value={currentStudent[value]}
+                        onChange={(e) =>
+                          setCurrentStudent({
+                            ...currentStudent,
+                            [value]: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdate} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Modal for Viewing Full Details */}
+      <Dialog
+        open={openDetailView}
+        onClose={handleCloseDetailView}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Full Student Details</DialogTitle>
+        <DialogContent>
+          {currentStudent && (
+            <Box sx={{ overflowY: "auto", height: "400px" }}>
+              <Typography variant="h6">
+                Reg. No: {currentStudent.regNo}
+              </Typography>
+              <Typography variant="body1">
+                <b>Name:</b> {currentStudent.name}
+              </Typography>
+              <Typography variant="body1">
+                <b>Gender:</b> {currentStudent.gender}
+              </Typography>
+              <Typography variant="body1">
+                <b>Hostel:</b> {currentStudent.hostel}
+              </Typography>
+              <Typography variant="body1">
+                <b>Faculty:</b> {currentStudent.faculty}
+              </Typography>
+              <Typography variant="body1">
+                <b>Department:</b> {currentStudent.department}
+              </Typography>
+              <Typography variant="body1">
+                <b>Contact No:</b> {currentStudent.contactNo}
+              </Typography>
+              <Typography variant="body1">
+                <b>Email:</b> {currentStudent.email}
+              </Typography>
+              <Typography variant="body1">
+                <b>Parent Contact No:</b> {currentStudent.parentNo}
+              </Typography>
+              <Typography variant="body1">
+                <b>Address:</b> {currentStudent.address}
+              </Typography>
+              <Typography variant="body1">
+                <b>Registering Year:</b> Year {currentStudent.registeringYear}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDetailView} color="primary">
+            Close
           </Button>
         </DialogActions>
       </Dialog>

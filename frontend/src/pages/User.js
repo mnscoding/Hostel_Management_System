@@ -12,7 +12,9 @@ const User = () => {
 
   return (
     <div className="main-content">
-      <Button onClick={handleBack}>BACK</Button>
+      <Button onClick={handleBack} sx={{ mb: 0, pb: 0 }}>
+        BACK
+      </Button>
       <div>
         <UserDetails />
       </div>

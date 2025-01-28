@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import logo from "../images/Logo-SUSL.png";
+import colors from "../config/colors";
 
 function Navbar() {
   const { logout } = useLogout();
@@ -20,7 +21,7 @@ function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "rgb(81, 1, 2)" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: colors.primary }}>
       <div className="parent">
         <div className="child">
           <img className="logo" src={logo} width="80px" alt="Logo"></img>

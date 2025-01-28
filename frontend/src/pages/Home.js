@@ -11,6 +11,8 @@ const NewHome = () => {
 };
 
 export default NewHome;*/
+
+/*2025
 import React, { useState } from "react";
 import img1 from "../images/img10.jpg";
 import img2 from "../images/img11.jpg"; // Image for Notices
@@ -58,7 +60,7 @@ const NewHome = () => {
         </Typography>
 
         <Grid container spacing={4}>
-          {/* Register Card */}
+         
           <Grid item xs={12} sm={6} md={4}>
             <Card>
               <CardMedia
@@ -110,7 +112,7 @@ const NewHome = () => {
             </Card>
           </Grid>
 
-          {/* Notices Card */}
+          
           <Grid item xs={12} sm={6} md={4}>
             <Card>
               <CardMedia
@@ -163,7 +165,7 @@ const NewHome = () => {
             </Card>
           </Grid>
 
-          {/* Complaints Card */}
+         
           <Grid item xs={12} sm={6} md={4}>
             <Card>
               <CardMedia
@@ -215,6 +217,157 @@ const NewHome = () => {
               </CardContent>
             </Card>
           </Grid>
+        </Grid>
+      </Box>
+    </div>
+  );
+};
+
+export default NewHome;*/
+
+import React, { useState } from "react";
+import img1 from "../images/img10.jpg";
+import img2 from "../images/img11.jpg";
+import img3 from "../images/img12.webp";
+import { Link } from "react-router-dom";
+import ImageCarousel from "../components/ImageCarousel";
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Collapse,
+} from "@mui/material";
+import { styled } from "@mui/system";
+
+const StyledCard = styled(Card)({
+  transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.3)",
+  },
+  borderRadius: 15,
+  overflow: "hidden",
+  height: 420,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+});
+
+const GradientButton = styled(Button)({
+  background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+  color: "#fff",
+  fontWeight: "bold",
+  borderRadius: 20,
+  padding: "8px 16px",
+  textTransform: "none",
+  fontSize: "0.9rem",
+  boxShadow: "0px 4px 10px rgba(33, 203, 243, 0.5)",
+  "&:hover": {
+    background: "linear-gradient(45deg, #21CBF3 30%, #2196F3 90%)",
+  },
+});
+
+const StyledLink = styled(Link)({
+  textDecoration: "none",
+  color: "#2196F3",
+  fontWeight: "bold",
+  "&:hover": {
+    textDecoration: "underline",
+  },
+});
+
+const NewHome = () => {
+  const [expandedRegister, setExpandedRegister] = useState(false);
+  const [expandedNotice, setExpandedNotice] = useState(false);
+  const [expandedComplaints, setExpandedComplaints] = useState(false);
+
+  return (
+    <div className="main-content">
+      <ImageCarousel />
+
+      <Box sx={{ p: 6, textAlign: "center" }}>
+        <Typography variant="h3" fontWeight={700} gutterBottom>
+          Welcome to the Hostel Management System
+        </Typography>
+        <Typography variant="h6" color="text.secondary" sx={{ pb: 3 }}>
+          Your one-stop solution for managing hostel operations at Sabaragamuwa
+          University.
+        </Typography>
+
+        <Grid container spacing={4}>
+          {[
+            {
+              title: "Register",
+              img: img1,
+              desc: "Easily register new students for hostel accommodations and manage details.",
+              expanded: expandedRegister,
+              setExpanded: setExpandedRegister,
+              link: "/hostels",
+            },
+            {
+              title: "Notices",
+              img: img2,
+              desc: "Stay updated with the latest announcements and notices.",
+              expanded: expandedNotice,
+              setExpanded: setExpandedNotice,
+              link: "/notices",
+            },
+            {
+              title: "Complaints",
+              img: img3,
+              desc: "File and track complaints related to hostel facilities and services.",
+              expanded: expandedComplaints,
+              setExpanded: setExpandedComplaints,
+              link: "/complaints",
+            },
+          ].map((item, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <StyledCard sx={{ backgroundColor: "#bdc3c7" }}>
+                <CardMedia
+                  component="img"
+                  src={item.img}
+                  alt={`${item.title} illustration`}
+                  sx={{
+                    width: "100%",
+                    height: 200,
+                    objectFit: "cover",
+                    borderBottom: "4px solid #2196F3",
+                  }}
+                />
+                <CardContent sx={{ textAlign: "left", pt: 1, pb: 0 }}>
+                  <Typography
+                    variant="h5"
+                    fontWeight={600}
+                    sx={{ mt: 0, mb: 1 }}
+                  >
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.desc}
+                  </Typography>
+                  <Collapse in={item.expanded} timeout="auto" unmountOnExit>
+                    <Typography variant="body2" sx={{ mt: 2 }}>
+                      More details about {item.title}. Visit{" "}
+                      <StyledLink to={item.link}>{item.title}</StyledLink>
+                    </Typography>
+                  </Collapse>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", mt: 2 }}
+                  >
+                    <GradientButton
+                      onClick={() => item.setExpanded(!item.expanded)}
+                    >
+                      {item.expanded ? "View Less" : "Learn More"}
+                    </GradientButton>
+                  </Box>
+                </CardContent>
+              </StyledCard>
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </div>

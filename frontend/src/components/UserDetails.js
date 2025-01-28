@@ -113,7 +113,18 @@ const UserDetails = () => {
   return (
     <Box sx={{ maxWidth: 1000, margin: "auto", mt: 0 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600, // Bold but not too heavy
+            fontSize: "2rem", // Slightly larger font for prominence
+            color: "#333", // Dark color for better readability
+            letterSpacing: "0.5px", // Subtle letter spacing for a cleaner appearance
+            lineHeight: 1.3, // Adjusted line height for better spacing
+            marginBottom: "1.5rem",
+            mt: 0, // Spacing below the title
+          }}
+        >
           Users
         </Typography>
         <Box display="flex" alignItems="center">
