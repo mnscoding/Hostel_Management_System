@@ -544,6 +544,7 @@ const AdminDashboard = () => {
     total: 0,
     resolved: 0,
     unresolved: 0,
+    processing: 0,
   });
   const [hostelApplyCounts, setHostelApplyCounts] = useState({
     total: 0,
@@ -559,6 +560,7 @@ const AdminDashboard = () => {
     student: 0,
   });
   const [noticeCount, setNoticeCount] = useState(0);
+  const [approvedEmailsCount, setApprovedEmailsCount] = useState(0);
   const [hostelCount, setHostelCount] = useState({
     total: 0,
     filled: 0,
@@ -597,6 +599,15 @@ const AdminDashboard = () => {
         console.error("Error fetching noticecount:", error);
       }
     };
+    const fetchApprovedEmailsCount = async () => {
+      try {
+        const response = await fetch("/api/dashboard/approvedEmailsCount");
+        const data = await response.json();
+        setApprovedEmailsCount(data.count);
+      } catch (error) {
+        console.error("Error fetching noticecount:", error);
+      }
+    };
 
     const fetchHostelCount = async () => {
       try {
@@ -620,6 +631,7 @@ const AdminDashboard = () => {
           total: data.totalCount,
           resolved: data.resolvedCount,
           unresolved: data.unresolvedCount,
+          processing: data.processingCount,
         });
       } catch (error) {
         console.error("Error fetching complaint counts:", error);
@@ -658,7 +670,7 @@ const AdminDashboard = () => {
 
     const fetchRegistrationCount = async () => {
       try {
-        const response = await fetch("/api/dashboard/registrationCount");
+        const response = await fetch("/api/dashboard/registerCount");
         const data = await response.json();
         setRegistrationCount(data.count);
       } catch (error) {
@@ -669,6 +681,7 @@ const AdminDashboard = () => {
     fetchStudentCount();
     fetchComplaintCounts();
     fetchNoticeCount();
+    fetchApprovedEmailsCount();
     fetchHostelCount();
     fetchUserCounts();
     fetchStaffCount();
@@ -704,6 +717,9 @@ const AdminDashboard = () => {
   };
   const handleViewAllNotices = () => {
     navigate("/notices");
+  };
+  const handleViewAllApprovedEmails = () => {
+    navigate("/approvedEmails");
   };
   const handleViewAllStaff = () => {
     navigate("/staff");
@@ -803,6 +819,9 @@ const AdminDashboard = () => {
                     Rejected: {hostelApplyCounts.rejected}
                   </Typography>
                   <Typography>Pending: {hostelApplyCounts.pending}</Typography>
+                  <Typography>
+                    Total Approved Emails: {approvedEmailsCount}
+                  </Typography>
                 </CardContent>
                 <CardActions>
                   <Button
@@ -811,6 +830,13 @@ const AdminDashboard = () => {
                     onClick={handleViewAllRequests}
                   >
                     View Requests
+                  </Button>
+                  <Button
+                    size="small"
+                    startIcon={<Visibility />}
+                    onClick={handleViewAllApprovedEmails}
+                  >
+                    View Emails
                   </Button>
                 </CardActions>
               </Card>
@@ -883,7 +909,10 @@ const AdminDashboard = () => {
                     Resolved Complaints: {complaintCounts.resolved}
                   </Typography>
                   <Typography>
-                    Pending Complaints: {complaintCounts.unresolved}
+                    Unresolved Complaints: {complaintCounts.unresolved}
+                  </Typography>
+                  <Typography>
+                    Processing Complaints: {complaintCounts.processing}
                   </Typography>
                 </CardContent>
                 <CardActions>

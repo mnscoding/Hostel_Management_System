@@ -99,10 +99,20 @@ const updateRegister = async (req, res) => {
 
   res.status(200).json(register);
 };
+
+const getRegisterCount = async (req, res) => {
+  try {
+    const count = await Register.countDocuments();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 module.exports = {
   upload,
   uploadFile,
   getRegisters,
   deleteRegister,
   updateRegister,
+  getRegisterCount,
 };

@@ -38,14 +38,23 @@ const getStaff = async (req, res) => {
 };
 
 const uploadFile = async (req, res) => {
-  const { name, gender, address, contactNo, hostel, position, email } =
-    req.body;
+  const {
+    name,
+    gender,
+    maritalStatus,
+    address,
+    contactNo,
+    hostel,
+    position,
+    email,
+  } = req.body;
   const filepath = req.file ? req.file.path : null; // Get file path
 
   try {
     const newStaff = await Staff.create({
       name,
       gender,
+      maritalStatus,
       address,
       contactNo,
       hostel,

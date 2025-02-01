@@ -23,7 +23,7 @@ const complaintSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["unresolved", "resolved"],
+      enum: ["unresolved", "resolved", "processing"],
       default: "unresolved",
     }, // New field
   },

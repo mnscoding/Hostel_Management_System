@@ -227,11 +227,17 @@ const getComplaintCount = async (req, res) => {
       status: "unresolved",
     });
 
+    // Get count of unresolved complaints
+    const processingCount = await Complaint.countDocuments({
+      status: "processing",
+    });
+
     // Send the counts as response
     res.status(200).json({
       totalCount,
       resolvedCount,
       unresolvedCount,
+      processingCount,
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });

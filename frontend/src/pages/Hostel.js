@@ -133,7 +133,14 @@ const Hostel = () => {
         <Button
           color="primary" // Blue text color
           onClick={() => setShowForm((prev) => !prev)}
-          style={{ marginBottom: "0px" }} // Add margin for spacing
+          sx={{
+            mb: 0,
+            color: "white",
+            backgroundColor: "black",
+            "&:hover": { backgroundColor: "grey", color: "black" },
+            padding: "8px 16px",
+            borderRadius: "8px",
+          }} // Add margin for spacing
         >
           {showForm ? "Back to Hostels" : "+ Add Hostel"}
         </Button>

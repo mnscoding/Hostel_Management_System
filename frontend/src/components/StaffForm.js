@@ -14,6 +14,7 @@ import {
 const StaffUpload = ({ onSuccess }) => {
   const [file, setFile] = useState(null);
   const [name, setName] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
   const [gender, setGender] = useState("");
   const [address, setAddress] = useState("");
   const [contactNo, setContactNo] = useState("");
@@ -36,6 +37,7 @@ const StaffUpload = ({ onSuccess }) => {
     formData.append("file", file);
     formData.append("name", name);
     formData.append("gender", gender);
+    formData.append("maritalStatus", maritalStatus);
     formData.append("address", address);
     formData.append("contactNo", contactNo);
     formData.append("hostel", hostel);
@@ -90,6 +92,17 @@ const StaffUpload = ({ onSuccess }) => {
           <Select value={gender} onChange={(e) => setGender(e.target.value)}>
             <MenuItem value="Male">Male</MenuItem>
             <MenuItem value="Female">Female</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth required sx={{ mb: 2 }}>
+          <InputLabel>Title</InputLabel>
+          <Select
+            value={maritalStatus}
+            onChange={(e) => setMaritalStatus(e.target.value)}
+          >
+            <MenuItem value="Miss">Miss</MenuItem>
+            <MenuItem value="Mr">Mr</MenuItem>
+            <MenuItem value="Mrs">Mrs</MenuItem>
           </Select>
         </FormControl>
         <TextField

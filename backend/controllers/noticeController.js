@@ -121,10 +121,10 @@ const getNotice = async (req, res) => {
 
 // Create new notice
 const createNotice = async (req, res) => {
-  const { date, title, description } = req.body;
+  const { date, hostel, title, description } = req.body;
 
   try {
-    const notice = await Notice.create({ date, title, description });
+    const notice = await Notice.create({ date, hostel, title, description });
     res.status(200).json(notice);
   } catch (error) {
     res.status(400).json({ error: error.message });

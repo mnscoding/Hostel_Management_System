@@ -447,6 +447,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { motion } from "framer-motion";
 
 const HostelDetails = ({ hostel, onEdit, onDeleteSuccess, canEditDelete }) => {
   const { dispatch } = useHostelsContext();
@@ -495,120 +496,126 @@ const HostelDetails = ({ hostel, onEdit, onDeleteSuccess, canEditDelete }) => {
 
   return (
     <>
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: 1000,
-          margin: "20px auto",
-          borderRadius: 3,
-          boxShadow: 5,
-          overflow: "visible",
-          position: "relative",
-          backgroundColor: isFull ? "#f8d7da" : "#ffffff", // Light red if full
-        }}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        <CardContent>
-          <Typography variant="h4" fontWeight="bold" gutterBottom noWrap>
-            {hostel.name}
-            {isFull && (
-              <Chip
-                label="Full"
-                color="error"
-                size="small"
-                sx={{
-                  marginLeft: 1,
-                  fontWeight: "bold",
-                }}
-              />
-            )}
-          </Typography>
+        <Card
+          sx={{
+            width: "100%",
+            maxWidth: 1000,
+            margin: "20px auto",
+            borderRadius: 3,
+            boxShadow: 5,
+            overflow: "visible",
+            position: "relative",
+            backgroundColor: isFull ? "#f8d7da" : "#ffffff", // Light red if full
+          }}
+        >
+          <CardContent>
+            <Typography variant="h4" fontWeight="bold" gutterBottom noWrap>
+              {hostel.name}
+              {isFull && (
+                <Chip
+                  label="Full"
+                  color="error"
+                  size="small"
+                  sx={{
+                    marginLeft: 1,
+                    fontWeight: "bold",
+                  }}
+                />
+              )}
+            </Typography>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body1" color="textPrimary">
-                <strong>Location:</strong> {hostel.location}
-              </Typography>
-              <Typography variant="body1" color="textPrimary">
-                <strong>Gender:</strong> {hostel.gender}
-              </Typography>
-              <Typography variant="body1" color="textPrimary">
-                <strong>Warden:</strong> {hostel.warden}
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Typography variant="body1" color="textPrimary">
-                <strong>Room Count:</strong> {hostel.roomCount}
-              </Typography>
-              <Typography variant="body1" color="textPrimary">
-                <strong>Max Students:</strong> {hostel.maxStudents}
-              </Typography>
-              <Typography variant="body1" color="textPrimary">
-                <strong>Total Students:</strong> {totalStudents}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Divider sx={{ my: 2 }} />
-
-          {hostel.existingStudents && hostel.existingStudents.length > 0 && (
-            <Box mb={2}>
-              <Typography variant="h6" color="textPrimary" gutterBottom>
-                Existing Students:
-              </Typography>
-              {hostel.existingStudents.map((student, index) => (
-                <Typography key={index} variant="body2" color="textSecondary">
-                  Year {student.year} - {student.faculty}: {student.count}{" "}
-                  students
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="body1" color="textPrimary">
+                  <strong>Location:</strong> {hostel.location}
                 </Typography>
-              ))}
+                <Typography variant="body1" color="textPrimary">
+                  <strong>Gender:</strong> {hostel.gender}
+                </Typography>
+                <Typography variant="body1" color="textPrimary">
+                  <strong>Warden:</strong> {hostel.warden}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Typography variant="body1" color="textPrimary">
+                  <strong>Room Count:</strong> {hostel.roomCount}
+                </Typography>
+                <Typography variant="body1" color="textPrimary">
+                  <strong>Max Students:</strong> {hostel.maxStudents}
+                </Typography>
+                <Typography variant="body1" color="textPrimary">
+                  <strong>Total Students:</strong> {totalStudents}
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <Divider sx={{ my: 2 }} />
+
+            {hostel.existingStudents && hostel.existingStudents.length > 0 && (
+              <Box mb={2}>
+                <Typography variant="h6" color="textPrimary" gutterBottom>
+                  Existing Students:
+                </Typography>
+                {hostel.existingStudents.map((student, index) => (
+                  <Typography key={index} variant="body2" color="textSecondary">
+                    Year {student.year} - {student.faculty}: {student.count}{" "}
+                    students
+                  </Typography>
+                ))}
+              </Box>
+            )}
+          </CardContent>
+
+          {canEditDelete && (
+            <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+              <IconButton
+                onClick={() => {
+                  setHostelToDelete(hostel._id);
+                  setOpenConfirmDialog(true);
+                }}
+                sx={{ marginRight: 1 }}
+              >
+                <DeleteIcon />
+              </IconButton>
+              <IconButton onClick={() => onEdit(hostel)}>
+                <EditIcon />
+              </IconButton>
             </Box>
           )}
-        </CardContent>
+        </Card>
 
-        {canEditDelete && (
-          <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
-            <IconButton
-              onClick={() => {
-                setHostelToDelete(hostel._id);
-                setOpenConfirmDialog(true);
-              }}
-              sx={{ marginRight: 1 }}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton onClick={() => onEdit(hostel)}>
-              <EditIcon />
-            </IconButton>
-          </Box>
-        )}
-      </Card>
-
-      <Dialog
-        open={openConfirmDialog}
-        onClose={() => setOpenConfirmDialog(false)}
-        sx={{
-          "& .MuiDialog-paper": {
-            borderRadius: 2,
-            minWidth: 300,
-          },
-        }}
-      >
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to delete this hostel?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenConfirmDialog(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDelete} color="error">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog
+          open={openConfirmDialog}
+          onClose={() => setOpenConfirmDialog(false)}
+          sx={{
+            "& .MuiDialog-paper": {
+              borderRadius: 2,
+              minWidth: 300,
+            },
+          }}
+        >
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogContent>
+            <Typography variant="body1">
+              Are you sure you want to delete this hostel?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenConfirmDialog(false)} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDelete} color="error">
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </motion.div>
     </>
   );
 };

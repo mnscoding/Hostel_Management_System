@@ -126,38 +126,39 @@ const Staff = () => {
   };
 
   return (
-    <Box sx={{ padding: "20px", paddingTop: "0px" }}>
-      {role === "Admin" && (
-        <Button
-          onClick={handleToggle}
-          sx={{
-            mb: 0,
-            color: "#fff",
-            backgroundColor: "#800000",
-            "&:hover": { backgroundColor: "#660000" },
-            padding: "8px 16px",
-            borderRadius: "8px",
-            fontWeight: "bold",
-          }}
-          startIcon={isFormVisible ? <ArrowBackIcon /> : <AddIcon />}
-        >
-          {isFormVisible ? "Back to Staff" : "Add New"}
-        </Button>
-      )}
+    <div className="main-content">
+      <Box sx={{ padding: "20px", paddingTop: "0px" }}>
+        {role === "Admin" && (
+          <Button
+            onClick={handleToggle}
+            sx={{
+              mb: 0,
+              color: "white",
+              backgroundColor: "black",
+              "&:hover": { backgroundColor: "grey", color: "black" },
+              padding: "8px 16px",
+              borderRadius: "8px",
+            }}
+            startIcon={isFormVisible ? <ArrowBackIcon /> : <AddIcon />}
+          >
+            {isFormVisible ? "Back to Staff" : "Add New"}
+          </Button>
+        )}
 
-      {isFormVisible ? (
-        <StaffForm onSuccess={handleFormSubmitSuccess} />
-      ) : (
-        <StaffDetail />
-      )}
+        {isFormVisible ? (
+          <StaffForm onSuccess={handleFormSubmitSuccess} />
+        ) : (
+          <StaffDetail />
+        )}
 
-      <Snackbar
-        open={submissionSuccess}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        message="New staff member added successfully."
-      />
-    </Box>
+        <Snackbar
+          open={submissionSuccess}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          message="New staff member added successfully."
+        />
+      </Box>
+    </div>
   );
 };
 

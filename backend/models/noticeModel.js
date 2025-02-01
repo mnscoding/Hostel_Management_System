@@ -17,6 +17,10 @@ const noticeSchema = new Schema(
       required: true,
       maxLength: 500,
     },
+    hostel: {
+      type: String,
+      required: true,
+    },
     /*user_id: {
       type: String,
       required: true,
