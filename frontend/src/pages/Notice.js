@@ -806,14 +806,15 @@ const Notice = () => {
       {(user?.category === "Admin" || user?.category === "Staff") && (
         <Button
           onClick={toggleForm}
-          variant="contained"
+          variant="outlined"
           color="primary"
           sx={{
             mb: 3,
-            background: "black",
-            color: "white",
+            borderColor: "rgb(81,1,2)",
+            color: "rgb(81,1,2)", // Custom border color
             "&:hover": {
-              background: "#333", // Darker shade for hover effect
+              borderColor: "rgb(81,1,2)", // Ensure border color stays the same on hover
+              backgroundColor: "rgba(81,1,2, 0.1)", // Optional: add a subtle background color on hover
             },
           }}
         >

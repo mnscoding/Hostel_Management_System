@@ -18,7 +18,7 @@ const registerSchema = new Schema(
       required: true,
     },
     parentNo: { type: String, required: true },
-    filepath: { type: String, required: false }, // File path
+    //filepath: { type: String, required: false }, // File path
   },
   {
     timestamps: true,

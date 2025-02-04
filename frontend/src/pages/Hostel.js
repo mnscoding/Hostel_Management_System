@@ -131,15 +131,16 @@ const Hostel = () => {
     <div className="main-content">
       {isAdminOrStaff && (
         <Button
+          variant="outlined"
           color="primary" // Blue text color
           onClick={() => setShowForm((prev) => !prev)}
           sx={{
-            mb: 0,
-            color: "white",
-            backgroundColor: "black",
-            "&:hover": { backgroundColor: "grey", color: "black" },
-            padding: "8px 16px",
-            borderRadius: "8px",
+            borderColor: "rgb(81,1,2)",
+            color: "rgb(81,1,2)", // Custom border color
+            "&:hover": {
+              borderColor: "rgb(81,1,2)", // Ensure border color stays the same on hover
+              backgroundColor: "rgba(81,1,2, 0.1)", // Optional: add a subtle background color on hover
+            },
           }} // Add margin for spacing
         >
           {showForm ? "Back to Hostels" : "+ Add Hostel"}

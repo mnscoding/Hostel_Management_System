@@ -224,7 +224,7 @@ const NewHome = () => {
 };
 
 export default NewHome;*/
-
+/*2025.02.01
 import React, { useState } from "react";
 import img1 from "../images/img10.jpg";
 import img2 from "../images/img11.jpg";
@@ -369,6 +369,192 @@ const NewHome = () => {
             </Grid>
           ))}
         </Grid>
+      </Box>
+    </div>
+  );
+};
+
+export default NewHome;*/
+
+/*good
+
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { styled } from "@mui/system";
+import MenuIcon from "@mui/icons-material/Menu";
+import img4 from "../images/img1.jpg"; // Background Image
+import NoticeCarousel from "../components/NoticeCarousel";
+import CountNumber from "../components/CountNumber";
+
+// Styled Components
+const BackgroundContainer = styled(Box)({
+  position: "relative",
+  width: "100%",
+  minHeight: "100vh",
+  backgroundImage: `url(${img4})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  color: "#fff",
+  boxSizing: "border-box",
+  margin: 0,
+  padding: 0,
+  overflowX: "hidden",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 50, 0.5)",
+  },
+});
+
+const MenuButton = styled(Box)({
+  position: "absolute",
+  top: "20px",
+  right: "20px",
+  cursor: "pointer",
+  zIndex: 2,
+});
+
+const ContentContainer = styled(Box)({
+  width: "100%",
+  backgroundColor: "#fff",
+  padding: "50px 0",
+  textAlign: "center",
+  boxSizing: "border-box",
+  margin: 0,
+});
+
+const NewHome = () => {
+  return (
+    <div className="main-content">
+      <Box sx={{ width: "100%", overflowX: "hidden", margin: 0, padding: 0 }}>
+        
+        <BackgroundContainer>
+          
+          <Typography variant="h3" fontWeight={700} sx={{ zIndex: 2 }}>
+            Welcome to Hostel Management System
+          </Typography>
+          <Typography variant="body1" sx={{ zIndex: 2, marginTop: "10px" }}>
+            Website to manage accommodations at the Sabaragamuwa University of
+            Sri Lanka.
+          </Typography>
+        </BackgroundContainer>
+
+        
+        <ContentContainer>
+          <NoticeCarousel />
+          <CountNumber />
+        </ContentContainer>
+      </Box>
+    </div>
+  );
+};
+
+export default NewHome;*/
+
+import React from "react";
+import { Box, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import img4 from "../images/img1.jpg"; // Background Image
+import NoticeCarousel from "../components/NoticeCarousel";
+import CountNumber from "../components/CountNumber";
+import GallerySection from "../components/GallerySection";
+
+const NewHome = () => {
+  return (
+    <div className="main-content">
+      <Box sx={{ width: "100%", overflowX: "hidden", margin: 0, padding: 0 }}>
+        {/* Hero Section */}
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            minHeight: "100vh",
+            backgroundImage: `url(${img4})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            color: "#fff",
+            boxSizing: "border-box",
+            margin: 0,
+            padding: 0,
+            overflowX: "hidden",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 50, 0.5)",
+            },
+          }}
+        >
+          {/* Welcome Text */}
+          <Typography variant="h3" fontWeight={700} sx={{ zIndex: 2 }}>
+            Welcome to Hostel Management System
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{ zIndex: 2, marginTop: "10px", fontWeight: 400 }}
+          >
+            A place to manage your accommodation, facilities, and hostel-related
+            tasks.
+          </Typography>
+
+          {/* Apply Now Button */}
+          <Link to="/hostels" style={{ textDecoration: "none", zIndex: 2 }}>
+            <Box
+              sx={{
+                marginTop: "30px",
+                backgroundColor: "#fff",
+                color: "rgb(81,1,2)",
+                padding: "15px 40px",
+                borderRadius: "30px",
+                fontWeight: 700,
+                cursor: "pointer",
+                fontSize: "18px",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#f0f0f0",
+                  transform: "scale(1.05)", // Slight hover scale effect
+                },
+              }}
+            >
+              Apply Now
+            </Box>
+          </Link>
+        </Box>
+
+        {/* Section Below Background */}
+        <Box
+          sx={{
+            width: "100%",
+            backgroundColor: "#fff",
+            padding: "50px 0",
+            textAlign: "center",
+            boxSizing: "border-box",
+            margin: 0,
+          }}
+        >
+          <NoticeCarousel />
+          <CountNumber />
+          <GallerySection />
+        </Box>
       </Box>
     </div>
   );

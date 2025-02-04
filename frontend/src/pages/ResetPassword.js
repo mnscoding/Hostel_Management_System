@@ -10,6 +10,7 @@ import {
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirming password
   const [error, setError] = useState(null);
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -20,6 +21,11 @@ const ResetPassword = () => {
 
     if (!token) {
       setError("Invalid reset link.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
@@ -59,6 +65,15 @@ const ResetPassword = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               fullWidth
               required
+            />
+            <TextField
+              label="Confirm New Password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              fullWidth
+              required
+              sx={{ marginTop: "16px" }}
             />
             <Button
               type="submit"

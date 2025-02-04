@@ -44,7 +44,7 @@ const uploadFile = async (req, res) => {
       contactNo,
       email,
       parentNo,
-      filepath,
+      //filepath,
     });
 
     const subject = `Registration`;

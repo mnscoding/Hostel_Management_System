@@ -212,6 +212,7 @@ function App() {
             ></Route>
           </Routes>
         </div>
+        <Footer />
       </BrowserRouter>
     </div>
   );

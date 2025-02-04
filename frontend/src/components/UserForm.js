@@ -118,12 +118,12 @@ const ApprovedEmailForm = () => {
   };
 
   return (
-    <div className="main-content">
+    <div>
       <Box
         sx={{
           maxWidth: 400,
           mx: "auto",
-          mt: 8,
+          mt: 0,
           p: 3,
           bgcolor: "background.paper",
           boxShadow: 3,
