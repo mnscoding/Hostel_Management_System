@@ -88,18 +88,7 @@ function Navbar() {
                 Complaints
               </Button>
             )}
-            <Button
-              component={Link}
-              to="/about"
-              color="inherit"
-              sx={{
-                borderBottom: isActive("/about") ? "3px solid white" : "none",
-                color: "inherit",
-                borderRadius: 0,
-              }}
-            >
-              About
-            </Button>
+
             {role === "Admin" && (
               <Button
                 component={Link}
@@ -158,6 +147,18 @@ function Navbar() {
               }}
             >
               Staff
+            </Button>
+            <Button
+              component={Link}
+              to="/about"
+              color="inherit"
+              sx={{
+                borderBottom: isActive("/about") ? "3px solid white" : "none",
+                color: "inherit",
+                borderRadius: 0,
+              }}
+            >
+              About
             </Button>
           </Box>
         }

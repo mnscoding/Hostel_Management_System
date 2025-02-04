@@ -2847,7 +2847,7 @@ const TestUploads = () => {
   });
 
   return (
-    <Box sx={{ maxWidth: 1200, margin: "auto", mt: 4 }}>
+    <Box sx={{ maxWidth: 1200, margin: "auto", mt: 0 }}>
       <Typography
         variant="h4"
         sx={{
@@ -2924,7 +2924,9 @@ const TestUploads = () => {
                     >
                       <Box display="flex" alignItems="center" gap={2}>
                         <Box>
-                          <Typography variant="h6">{upload.regNo}</Typography>
+                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                            {upload.regNo}
+                          </Typography>
                           <Typography variant="body2" color="textSecondary">
                             {upload.name}
                           </Typography>
@@ -2973,31 +2975,31 @@ const TestUploads = () => {
                         }}
                       >
                         <Box display="flex" alignItems="center" gap={1}>
-                          <PersonIcon sx={{ color: "primary.main" }} />
+                          <PersonIcon sx={{ color: "black" }} />
                           <Typography variant="body2">
                             <b>Gender:</b> {upload.gender}
                           </Typography>
                         </Box>
                         <Box display="flex" alignItems="center" gap={1}>
-                          <SchoolIcon sx={{ color: "primary.main" }} />
+                          <SchoolIcon sx={{ color: "black" }} />
                           <Typography variant="body2">
                             <b>Faculty:</b> {upload.faculty}
                           </Typography>
                         </Box>
                         <Box display="flex" alignItems="center" gap={1}>
-                          <HomeIcon sx={{ color: "primary.main" }} />
+                          <HomeIcon sx={{ color: "black" }} />
                           <Typography variant="body2">
                             <b>Address:</b> {upload.address}
                           </Typography>
                         </Box>
                         <Box display="flex" alignItems="center" gap={1}>
-                          <PhoneIcon sx={{ color: "primary.main" }} />
+                          <PhoneIcon sx={{ color: "black" }} />
                           <Typography variant="body2">
                             <b>Contact No:</b> {upload.contactNo}
                           </Typography>
                         </Box>
                         <Box display="flex" alignItems="center" gap={1}>
-                          <EmailIcon sx={{ color: "primary.main" }} />
+                          <EmailIcon sx={{ color: "black" }} />
                           <Typography variant="body2">
                             <b>Email:</b> {upload.email}
                           </Typography>

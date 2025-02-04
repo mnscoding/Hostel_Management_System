@@ -264,7 +264,7 @@ const AddNoticeForm = ({ onSubmit, initialValues = {} }) => {
 };
 
 export default AddNoticeForm;*/
-
+/*02.04
 import React, { useEffect, useState } from "react";
 import {
   TextField,
@@ -406,6 +406,191 @@ const AddNoticeForm = ({ onSubmit, initialValues = {} }) => {
             fullWidth
             margin="normal"
             required
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "rgb(81, 1, 2)",
+              "&:hover": { backgroundColor: "rgba(81, 1, 2, 0.9)" },
+              marginTop: "16px",
+            }}
+          >
+            Submit
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default AddNoticeForm;*/
+
+import React, { useEffect, useState } from "react";
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+
+const AddNoticeForm = ({ onSubmit, initialValues = {} }) => {
+  const [date, setDate] = useState(initialValues.date || "");
+  const [title, setTitle] = useState(initialValues.title || "");
+  const [description, setDescription] = useState(
+    initialValues.description || ""
+  );
+  const [hostel, setHostel] = useState(initialValues.hostel || "");
+  const [hostels, setHostels] = useState([]); // State to store hostel names
+  const [error, setError] = useState(null);
+  const [file, setFile] = useState(null); // State to store file
+
+  useEffect(() => {
+    const fetchHostels = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/hostels");
+        if (!response.ok) throw new Error("Failed to fetch hostels");
+        const data = await response.json();
+        setHostels(data);
+      } catch (err) {
+        setError(err?.message || "An unknown error occurred");
+      }
+    };
+
+    fetchHostels();
+    if (initialValues._id) {
+      setDate(initialValues.date || "");
+      setTitle(initialValues.title || "");
+      setDescription(initialValues.description || "");
+      setHostel(initialValues.hostel || "");
+    }
+  }, [initialValues]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Basic validation for required fields
+    if (!date || !title || !description || !hostel) {
+      setError("All fields are required");
+      return;
+    }
+
+    const notice = { date, title, description, hostel };
+
+    // Create FormData to handle file upload
+    const formData = new FormData();
+    formData.append("date", date);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("hostel", hostel);
+
+    if (file) {
+      formData.append("file", file);
+    }
+
+    const method = initialValues._id ? "PATCH" : "POST";
+    const url = initialValues._id
+      ? `/api/notices/${initialValues._id}`
+      : "/api/notices";
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        body: formData,
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setError(json.error || "An error occurred while saving the notice");
+      } else {
+        // Reset form fields after successful submission
+        setDate("");
+        setTitle("");
+        setDescription("");
+        setHostel(""); // Reset hostel selection
+        setFile(null); // Reset file input
+        setError(null);
+        console.log("Notice saved", json);
+        onSubmit(); // Refresh the notices list
+      }
+    } catch (err) {
+      setError("An error occurred while submitting the notice");
+    }
+  };
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
+
+  if (hostels.length === 0) {
+    return <Typography>Loading hostels...</Typography>;
+  }
+
+  return (
+    <Card style={{ maxWidth: 600, margin: "auto", padding: "20px" }}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          {initialValues._id ? "Edit Notice" : "Add New Notice"}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+            required
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Hostel</InputLabel>
+            <Select
+              value={hostel}
+              onChange={(e) => setHostel(e.target.value)}
+              label="Hostel"
+            >
+              <MenuItem value="All">All Hostels</MenuItem>
+              {hostels.map((hostel) => (
+                <MenuItem key={hostel.name} value={hostel.name}>
+                  {hostel.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <TextField
+            label="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            multiline
+            rows={4}
+            fullWidth
+            margin="normal"
+            required
+          />
+
+          {/* File input field */}
+          <TextField
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+            fullWidth
+            margin="normal"
           />
 
           <Button
