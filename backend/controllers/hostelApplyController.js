@@ -33,7 +33,12 @@ const uploadFile = async (req, res) => {
     department,
     income,
   } = req.body;
-  const filepath = req.file ? req.file.path : null; // Get file path
+  /*02.08 commented for add photoPath
+  const filepath = req.file ? req.file.path : null;*/ // Get file path
+
+  const filepath = req.files && req.files.file ? req.files.file[0].path : null; // 'file' field
+  const photoPath =
+    req.files && req.files.photo ? req.files.photo[0].path : null; // 'photo
 
   try {
     const newHostelApply = await HostelApply.create({
@@ -50,6 +55,7 @@ const uploadFile = async (req, res) => {
       department,
       income,
       filepath,
+      photoPath,
     });
     res.status(201).json(newHostelApply);
   } catch (error) {
@@ -77,7 +83,7 @@ const deleteHostelApply = async (req, res) => {
     res.status(500).json({ error: "Failed to delete test" });
   }
 };
-
+/*
 const updateHostelApplyStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body; // Expecting status to be passed in the body
@@ -108,6 +114,67 @@ const updateHostelApplyStatus = async (req, res) => {
 
     res.status(200).json(updatedApply);
   } catch (error) {
+    res.status(500).json({ error: "Failed to update status" });
+  }
+};*/
+
+const updateHostelApplyStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  // Validate inputs
+  if (!id || !status) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const normalizedStatus = status.toLowerCase();
+  const allowedStatuses = ["accepted", "rejected"]; // Add other statuses if needed
+
+  if (!allowedStatuses.includes(normalizedStatus)) {
+    return res.status(400).json({ error: "Invalid status value" });
+  }
+
+  try {
+    const updatedApply = await HostelApply.findByIdAndUpdate(
+      id,
+      { status: normalizedStatus },
+      { new: true }
+    );
+
+    if (!updatedApply) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    // Prepare email content
+    let subject = `Your application has been ${normalizedStatus}`;
+    let message = `Dear ${updatedApply.name},\n\nYour application has been ${normalizedStatus}.`;
+
+    if (normalizedStatus === "accepted") {
+      message += `\n\nNow you can sign up to the system with this email.`;
+    }
+
+    // Send email to the applicant
+    try {
+      await sendMail(updatedApply.email, subject, message);
+    } catch (mailError) {
+      console.error("Failed to send email:", mailError);
+    }
+
+    // If accepted, save the email to ApprovedEmail collection
+    if (normalizedStatus === "accepted") {
+      try {
+        await ApprovedEmail.create({
+          email: updatedApply.email,
+          category: "Student",
+        });
+      } catch (approvalError) {
+        console.error("Failed to save approved email:", approvalError);
+      }
+    }
+
+    res.status(200).json(updatedApply);
+  } catch (error) {
+    console.error("Error updating application status:", error);
     res.status(500).json({ error: "Failed to update status" });
   }
 };

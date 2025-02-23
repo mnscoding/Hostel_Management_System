@@ -547,7 +547,7 @@ const ComplaintDetails = ({ complaint, onDelete, onEdit, onResolve }) => {
           fontWeight="bold"
           gutterBottom
           noWrap
-          sx={{ color: "primary.main" }}
+          sx={{ color: "black" }}
         >
           {complaint.hostel}
         </Typography>

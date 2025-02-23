@@ -14,6 +14,7 @@ const hostelApplySchema = new mongoose.Schema({
   department: { type: String, required: true },
   income: { type: String, required: true },
   filepath: { type: String, required: true },
+  photoPath: { type: String, required: true }, // For the uploaded photo
   status: {
     type: String,
     enum: ["pending", "accepted", "rejected"],

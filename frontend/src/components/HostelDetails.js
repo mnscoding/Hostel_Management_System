@@ -1105,10 +1105,6 @@ const HostelDetails = ({ hostel, onEdit, onDeleteSuccess, canEditDelete }) => {
                 <Typography variant="body1" color="textSecondary">
                   <strong>Warden:</strong> {hostel.warden}
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  <strong>Created At:</strong>{" "}
-                  {new Date(hostel.createdAt).toLocaleString()}
-                </Typography>
               </Box>
             )}
           </CardContent>
@@ -1121,7 +1117,7 @@ const HostelDetails = ({ hostel, onEdit, onDeleteSuccess, canEditDelete }) => {
                   setHostelToDelete(hostel._id);
                   setOpenConfirmDialog(true);
                 }}
-                sx={{ marginRight: 1 }}
+                sx={{ marginRight: 0 }}
               >
                 <DeleteIcon />
               </IconButton>

@@ -18,6 +18,7 @@ const registerRoutes = require("./routes/register");
 const approvedEmailRoutes = require("./routes/approvedEmail");
 const staffRoutes = require("./routes/staff");
 const stripeRoutes = require("./routes/stripeRoutes");
+const studentRequestRoutes = require("./routes/studentRequest");
 //express app
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/register", registerRoutes);
 app.use("/api/approvedEmails", approvedEmailRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/stripe", stripeRoutes);
+app.use("/api/studentRequests", studentRequestRoutes);
 //connect to db
 mongoose
   .connect(process.env.MONGO_URI)

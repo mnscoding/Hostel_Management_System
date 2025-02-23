@@ -630,14 +630,16 @@ const Complaint = () => {
     <div className="main-content">
       {isStudentOrStaff && (
         <Button
-          color="primary"
           onClick={() => setShowForm((prev) => !prev)}
+          variant="outlined"
+          color="primary"
           sx={{
-            mb: 3,
-            background: "black",
-            color: "white",
+            mt: 2,
+            borderColor: "rgb(81,1,2)",
+            color: "rgb(81,1,2)",
             "&:hover": {
-              background: "#333", // Darker shade for hover effect
+              borderColor: "rgb(81,1,2)",
+              backgroundColor: "rgba(81,1,2, 0.1)",
             },
           }}
         >

@@ -138,6 +138,8 @@ import ApprovedEmail from "./pages/ApprovedEmail";
 import AddUser from "./pages/AddUser";
 import ForgotPassword from "./pages/ForgotPassword"; // New page
 import ResetPassword from "./pages/ResetPassword"; // New page
+import StudentRequest from "./pages/StudentRequest";
+import TransferRequest from "./pages/TransferRequest";
 
 function App() {
   const { user } = useAuthContext();
@@ -164,6 +166,10 @@ function App() {
               element={!user ? <Login /> : <Complaint />}
             ></Route>
             <Route
+              path="/studentrequests"
+              element={!user ? <Login /> : <StudentRequest />}
+            ></Route>
+            <Route
               path="/hostels"
               element={
                 !user || user.category === "Staff" ? (
@@ -183,7 +189,9 @@ function App() {
             ></Route>
             <Route
               path="/register"
-              element={!user ? <Login /> : <Register />}
+              element={
+                user && user.category === "Admin" ? <Register /> : <Home />
+              }
             ></Route>
             <Route path="/contact" element={<ContactUs />}></Route>
             <Route
@@ -194,7 +202,19 @@ function App() {
             <Route path="/users" element={!user ? <Login /> : <User />}></Route>
             <Route
               path="/approvedEmails"
-              element={!user ? <Login /> : <ApprovedEmail />}
+              element={
+                user && user.category === "Admin" ? <ApprovedEmail /> : <Home />
+              }
+            ></Route>
+            <Route
+              path="/transferrequests"
+              element={
+                user && user.category === "Admin" ? (
+                  <TransferRequest />
+                ) : (
+                  <Home />
+                )
+              }
             ></Route>
 
             {/* Add Forgot Password and Reset Password routes */}

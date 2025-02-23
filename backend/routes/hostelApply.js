@@ -10,7 +10,17 @@ const {
 const router = express.Router();
 
 // Define the upload route
-router.post("/hostelApply", upload.single("file"), uploadFile);
+/*02.08 commented for add photoPath
+router.post("/hostelApply", upload.single("file"), uploadFile);*/
+
+router.post(
+  "/hostelApply",
+  upload.fields([
+    { name: "file", maxCount: 1 }, // For the main file
+    { name: "photo", maxCount: 1 }, // For the photo
+  ]),
+  uploadFile
+);
 
 // Get all tests
 router.get("/hostelApplies", getHostelApplies);

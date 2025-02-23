@@ -2,6 +2,21 @@ const Student = require("../models/studentModel");
 const Hostel = require("../models/hostelModel");
 const mongoose = require("mongoose");
 const { sendMail } = require("../services/emailService");
+const multer = require("multer");
+const path = require("path");
+
+// Set up storage for Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Folder to save uploaded files
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Rename file
+  },
+});
+
+// Initialize upload variable with Multer storage configuration
+const upload = multer({ storage });
 
 // Get all students
 const getStudents = async (req, res) => {
@@ -101,7 +116,10 @@ const createStudent = async (req, res) => {
     contactNo,
     email,
     parentNo,
+    image,
   } = req.body;
+
+  // const image = req.file ? req.file.path : null;
 
   try {
     // Check if the student already exists
@@ -115,7 +133,8 @@ const createStudent = async (req, res) => {
       student.contactNo = contactNo;
       student.email = email;
       student.parentNo = parentNo;
-
+      //optional
+      student.image = image || student.image;
       await student.save();
 
       // Update hostel's existing students count
@@ -140,7 +159,7 @@ const createStudent = async (req, res) => {
       }
 
       const subject = "Hostel Management System";
-      const message = `Dear ${student.name}, you have been assigned to ${hostel}.`;
+      const message = `Dear ${student.name}, \n\nYou have been assigned to ${hostel}.`;
       await sendMail(student.email, subject, message);
 
       return res.status(200).json(student);
@@ -158,6 +177,7 @@ const createStudent = async (req, res) => {
         contactNo,
         email,
         parentNo,
+        image,
       });
 
       // Update hostel's existing students count
@@ -191,6 +211,31 @@ const createStudent = async (req, res) => {
   }
 };
 
+const validateStudentDetails = async (req, res) => {
+  const { regNo, name, currentHostel } = req.body;
+
+  try {
+    // Find the student by regNo
+    const student = await Student.findOne({ regNo });
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found." });
+    }
+
+    // Validate name and currentHostel
+    if (
+      student.name.toLowerCase() !== name.toLowerCase() ||
+      student.hostel.toLowerCase() !== currentHostel.toLowerCase()
+    ) {
+      return res.status(400).json({ error: "Student details do not match." });
+    }
+
+    // If everything matches, return success
+    res.status(200).json({ message: "Student details are valid.", student });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 // Update a student
 const updateStudent = async (req, res) => {
   const { id } = req.params;
@@ -349,12 +394,14 @@ const getStudentCount = async (req, res) => {
 };
 
 module.exports = {
+  upload,
   getStudents,
   getStudent,
   createStudent,
   deleteStudent,
   updateStudent,
   getStudentCount,
+  validateStudentDetails,
 };
 
 /*const Student = require("../models/studentModel");

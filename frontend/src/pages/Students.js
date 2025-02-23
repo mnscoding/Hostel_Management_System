@@ -11,7 +11,20 @@ const Students = () => {
   };
   return (
     <div className="main-content">
-      <Button sx={{ mt: 0 }} onClick={handleBack}>
+      <Button
+        onClick={handleBack}
+        variant="outlined"
+        color="primary"
+        sx={{
+          mb: 0,
+          border: "none",
+          color: "rgb(81,1,2)", // Custom border color
+          "&:hover": {
+            borderColor: "rgb(81,1,2)", // Ensure border color stays the same on hover
+            backgroundColor: "rgba(81,1,2, 0.1)", // Optional: add a subtle background color on hover
+          },
+        }}
+      >
         BACK
       </Button>
       <div>

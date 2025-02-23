@@ -2378,6 +2378,7 @@ const AdminDashboard = () => {
   const handleViewAllApprovedEmails = () => navigate("/approvedEmails");
   const handleViewAllStaff = () => navigate("/staff");
   const handleViewAllHostels = () => navigate("/hostels");
+  const handleViewTransferRequests = () => navigate("/transferrequests");
 
   if (loading) {
     return (
@@ -2416,6 +2417,10 @@ const AdminDashboard = () => {
                   </Typography>
                   <Typography>
                     Students: <CountUp end={userCounts.student} duration={2} />
+                  </Typography>
+                  <Typography>
+                    Total Approved Emails:{" "}
+                    <CountUp end={approvedEmailsCount} duration={2} />
                   </Typography>
                 </CardContent>
                 <CardActions></CardActions>
@@ -2460,9 +2465,26 @@ const AdminDashboard = () => {
                     Pending:{" "}
                     <CountUp end={hostelApplyCounts.pending} duration={2} />
                   </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Student Request Management Section */}
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              onClick={handleViewTransferRequests}
+            >
+              <Card>
+                <CardContent>
+                  <Typography variant="h5">
+                    <Apartment sx={{ mr: 1 }} /> Transfer Management
+                  </Typography>
                   <Typography>
-                    Total Approved Emails:{" "}
-                    <CountUp end={approvedEmailsCount} duration={2} />
+                    Total Transfer Requests: <CountUp end={0} duration={2} />{" "}
+                    {/* Replace 0 with actual data if available */}
                   </Typography>
                 </CardContent>
               </Card>

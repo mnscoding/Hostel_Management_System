@@ -2,12 +2,16 @@ const express = require("express");
 const Student = require("../models/studentModel");
 const router = express.Router();
 const {
+  upload,
   getStudents,
   getStudent,
   createStudent,
   deleteStudent,
   updateStudent,
+  validateStudentDetails,
 } = require("../controllers/studentController");
+
+router.post("/validate", validateStudentDetails);
 
 //get all students
 router.get("/", getStudents);
@@ -16,7 +20,7 @@ router.get("/", getStudents);
 router.get("/:id", getStudent);
 
 //post a new student
-router.post("/", createStudent);
+router.post("/", upload.single("file"), createStudent);
 
 //delete a student
 router.delete("/:id", deleteStudent);

@@ -14,6 +14,7 @@ const studentSchema = new Schema({
   contactNo: { type: String, required: true },
   email: { type: String, required: true },
   parentNo: { type: String, required: true },
+  image: { type: String, required: true }, //add image
 });
 
 module.exports = mongoose.model("Student", studentSchema);

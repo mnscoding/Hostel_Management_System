@@ -43,7 +43,7 @@ const CountNumber = () => {
       >
         <Box>
           <Typography variant="h3" sx={{ fontWeight: 600 }}>
-            {inView ? <CountUp start={0} end={10} duration={2} /> : 0}
+            {inView ? <CountUp start={0} end={8} duration={2} /> : 0}
           </Typography>
           <Typography variant="subtitle1" sx={{ color: "#666" }}>
             FACULTIES

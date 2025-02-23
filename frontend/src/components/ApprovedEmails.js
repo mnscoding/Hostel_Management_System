@@ -392,7 +392,7 @@ const ApprovedEmails = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 1200, margin: "auto", mt: 4, p: 3 }}>
+    <Box sx={{ maxWidth: 1200, margin: "auto", mt: 0, p: 3 }}>
       <Box
         display="flex"
         justifyContent="space-between"
