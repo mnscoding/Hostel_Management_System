@@ -12,6 +12,9 @@ const { getHostelApplyCount } = require("../controllers/hostelApplyController");
 const {
   getApprovedEmailCount,
 } = require("../controllers/approvedEmailController");
+const {
+  getStudentRequestCount,
+} = require("../controllers/studentRequestController");
 
 router.get("/studentCount", getStudentCount);
 router.get("/userCount", getUserCount);
@@ -22,5 +25,6 @@ router.get("/hostelCount", getHostelCounts);
 router.get("/staffCount", getStaffCount);
 router.get("/hostelApplyCount", getHostelApplyCount);
 router.get("/approvedEmailsCount", getApprovedEmailCount);
+router.get("/transferCount", getStudentRequestCount);
 
 module.exports = router;

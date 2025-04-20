@@ -1403,10 +1403,10 @@ const TestUploads = () => {
       ) : error ? (
         <Typography color="error">{error}</Typography>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={0}>
           {filteredUploads.map((upload) => (
             <Grid item xs={12} key={upload._id}>
-              <Card variant="outlined" sx={{ mb: 2 }}>
+              <Card variant="outlined" sx={{ mb: 0 }}>
                 <CardContent>
                   <Box
                     display="flex"

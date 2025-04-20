@@ -2254,6 +2254,12 @@ const AdminDashboard = () => {
     rejected: 0,
     pending: 0,
   });
+  const [transferCounts, setTransferCounts] = useState({
+    total: 0,
+    accepted: 0,
+    rejected: 0,
+    pending: 0,
+  });
   const [staffCount, setStaffCount] = useState(0);
   const [userCounts, setUserCounts] = useState({
     total: 0,
@@ -2282,6 +2288,7 @@ const AdminDashboard = () => {
           hostelCountRes,
           complaintCountsRes,
           hostelApplyCountsRes,
+          transferCountsRes,
           userCountsRes,
           registrationCountRes,
         ] = await Promise.all([
@@ -2292,6 +2299,7 @@ const AdminDashboard = () => {
           fetch("/api/dashboard/hostelCount"),
           fetch("/api/dashboard/complaintCount"),
           fetch("/api/dashboard/hostelApplyCount"),
+          fetch("api/dashboard/transferCount"),
           fetch("/api/dashboard/userCount"),
           fetch("/api/dashboard/registerCount"),
         ]);
@@ -2306,6 +2314,7 @@ const AdminDashboard = () => {
           hostelApplyCountsData,
           userCountsData,
           registrationCountData,
+          transferCountData,
         ] = await Promise.all([
           studentCountRes.json(),
           staffCountRes.json(),
@@ -2316,6 +2325,7 @@ const AdminDashboard = () => {
           hostelApplyCountsRes.json(),
           userCountsRes.json(),
           registrationCountRes.json(),
+          transferCountsRes.json(),
         ]);
 
         setCount(studentCountData.count);
@@ -2332,6 +2342,12 @@ const AdminDashboard = () => {
           resolved: complaintCountsData.resolvedCount,
           unresolved: complaintCountsData.unresolvedCount,
           processing: complaintCountsData.processingCount,
+        });
+        setTransferCounts({
+          total: transferCountData.totalCount,
+          accepted: transferCountData.acceptedCount,
+          rejected: transferCountData.rejectedCount,
+          pending: transferCountData.pendingCount,
         });
         setHostelApplyCounts({
           total: hostelApplyCountsData.totalCount,
@@ -2483,8 +2499,20 @@ const AdminDashboard = () => {
                     <Apartment sx={{ mr: 1 }} /> Transfer Management
                   </Typography>
                   <Typography>
-                    Total Transfer Requests: <CountUp end={0} duration={2} />{" "}
-                    {/* Replace 0 with actual data if available */}
+                    Total Requests:{" "}
+                    <CountUp end={transferCounts.total} duration={2} />
+                  </Typography>
+                  <Typography>
+                    Accepted:{" "}
+                    <CountUp end={transferCounts.accepted} duration={2} />
+                  </Typography>
+                  <Typography>
+                    Rejected:{" "}
+                    <CountUp end={transferCounts.rejected} duration={2} />
+                  </Typography>
+                  <Typography>
+                    Pending:{" "}
+                    <CountUp end={hostelApplyCounts.pending} duration={2} />
                   </Typography>
                 </CardContent>
               </Card>

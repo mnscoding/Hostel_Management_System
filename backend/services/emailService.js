@@ -10,12 +10,28 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+/*
 function sendMail(to, sub, msg) {
   transporter.sendMail({
     to: to,
     subject: sub,
     html: msg,
   });
+}
+
+module.exports = { sendMail };*/
+
+function sendMail(to, sub, msg) {
+  try {
+    await;
+    transporter.sendMail({
+      to: to,
+      subject: sub,
+      html: msg,
+    });
+  } catch (err) {
+    console.error("Email failed:", err);
+  }
 }
 
 module.exports = { sendMail };

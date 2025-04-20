@@ -155,7 +155,7 @@ const getStudentRequestCount = async (req, res) => {
 
     // Get count of resolved complaints
     const acceptedCount = await StudentRequest.countDocuments({
-      status: "accepted",
+      status: "approved",
     });
 
     // Get count of unresolved complaints

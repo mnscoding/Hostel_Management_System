@@ -327,7 +327,12 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { CheckCircle, Cancel, PendingActions } from "@mui/icons-material";
+import {
+  CheckCircle,
+  Cancel,
+  PendingActions,
+  Delete,
+} from "@mui/icons-material";
 import colors from "../config/colors";
 
 const StudentRequestDetail = () => {
@@ -517,6 +522,41 @@ const StudentRequestDetail = () => {
     );
   }
 
+  //delete request
+  const handleDeleteRequest = async () => {
+    if (!selectedRequest) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/studentrequests/${selectedRequest._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        setSuccessMessage("Request deleted successfully.");
+        setOpenSnackbar(true);
+        setOpenDialog(false);
+
+        // Refresh the list of student requests after deletion
+        setTimeout(() => {
+          fetchStudentRequests();
+        }, 2000);
+      } else {
+        const json = await response.json();
+        setErrorMessage(json.error || "Failed to delete request.");
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      setErrorMessage("An error occurred while deleting the request.");
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box sx={{ maxWidth: 1200, margin: "auto", padding: 4, pt: 0 }}>
       <Typography
@@ -680,6 +720,14 @@ const StudentRequestDetail = () => {
             startIcon={<Cancel />}
           >
             Reject
+          </Button>
+          <Button
+            variant="contained"
+            color="white"
+            onClick={handleDeleteRequest}
+            startIcon={<Delete />}
+          >
+            Delete
           </Button>
           <Button onClick={handleCloseDialog} color="primary">
             Close
