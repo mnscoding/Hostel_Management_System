@@ -262,7 +262,7 @@ const StudentHostel = () => {
     <div className="main-content">
       <div
         style={{
-          padding: "20px",
+          padding: "0px",
           paddingTop: "0px",
           display: "flex",
           justifyContent: "space-between",
@@ -398,12 +398,12 @@ const StudentHostel = () => {
             onClick={handleBackClick}
             sx={{
               margin: "0px",
-              padding: "8px 16px", // Simple padding for better spacing
+              padding: "4px 16px", // Simple padding for better spacing
               fontSize: "1rem", // Standard font size
               fontWeight: "500", // Semi-bold for clarity without being too heavy
               backgroundColor: "white", // Deep red background
               color: "rgb(81, 1, 2)", // White text for good contrast
-              borderRadius: "4px", // Slightly rounded corners
+              borderRadius: "10px", // Slightly rounded corners
               textTransform: "none", // Preserve the button text's casing
               border: "none", // No border for a cleaner look
               "&:hover": {

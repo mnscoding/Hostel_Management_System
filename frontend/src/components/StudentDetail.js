@@ -2235,6 +2235,7 @@ const TestUploads = () => {
 
 export default TestUploads;*/
 
+/*2025.04.22
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -2316,8 +2317,38 @@ const TestUploads = () => {
     setCurrentStudent(null);
   };
 
+  //04.22
+  //const handleUpdate = async () => {
+    //try {
+      //const response = await fetch(
+        //`http://localhost:3000/api/students/${currentStudent._id}`,
+        //{
+          //method: "PATCH",
+          //headers: {
+            //"Content-Type": "application/json",
+          //},
+          //body: JSON.stringify(currentStudent),
+        //}
+      //);
+
+      //if (!response.ok) throw new Error("Failed to update student");
+
+      //setUploads((prevUploads) =>
+        //prevUploads.map((upload) =>
+          //upload._id === currentStudent._id ? currentStudent : upload
+        //)
+      //);
+
+      //handleCloseDialog();
+      //setSnackbarOpen(true);
+    //} catch (err) {
+      //setError(err.message);
+      //setSnackbarOpen(true);
+    //}
+  //};
   const handleUpdate = async () => {
     try {
+      // First, update the student record
       const response = await fetch(
         `http://localhost:3000/api/students/${currentStudent._id}`,
         {
@@ -2331,9 +2362,12 @@ const TestUploads = () => {
 
       if (!response.ok) throw new Error("Failed to update student");
 
+      const updatedStudent = await response.json();
+
+      // Update the local state
       setUploads((prevUploads) =>
         prevUploads.map((upload) =>
-          upload._id === currentStudent._id ? currentStudent : upload
+          upload._id === currentStudent._id ? updatedStudent : upload
         )
       );
 
@@ -2514,7 +2548,7 @@ const TestUploads = () => {
         </Grid>
       )}
 
-      {/* Dialog for Editing Student */}
+      //Dialog for Editing Student 
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
         <DialogTitle>Edit Student Details</DialogTitle>
         <DialogContent>
@@ -2607,7 +2641,7 @@ const TestUploads = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Modal for Viewing Full Details */}
+      //Modal for Viewing Full Details 
       <Dialog
         open={openDetailView}
         onClose={handleCloseDetailView}
@@ -2620,7 +2654,7 @@ const TestUploads = () => {
             <Box
               sx={{ overflowY: "auto", height: "400px", position: "relative" }}
             >
-              {/* Image Section */}
+              //Image Section 
               {currentStudent.image && (
                 <Box
                   sx={{
@@ -2646,7 +2680,7 @@ const TestUploads = () => {
                 </Box>
               )}
 
-              {/* Student Details Section */}
+              //Student Details Section 
               <Typography variant="h6" sx={{ mb: 2 }}>
                 Reg. No: {currentStudent.regNo}
               </Typography>
@@ -2734,7 +2768,641 @@ const TestUploads = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for error/success messages */}
+      //Snackbar for error/success messages 
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={error ? "error" : "success"}
+          sx={{ width: "100%" }}
+        >
+          {error || "Operation successful!"}
+        </Alert>
+      </Snackbar>
+    </Box>
+  );
+};
+
+export default TestUploads;*/
+
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  IconButton,
+  Skeleton,
+  Snackbar,
+  Alert,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Chip,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { motion, AnimatePresence } from "framer-motion";
+import colors from "../config/colors";
+
+// Icons
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import SchoolIcon from "@mui/icons-material/School";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import HotelIcon from "@mui/icons-material/Hotel";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import WcIcon from "@mui/icons-material/Wc";
+import FilterListIcon from "@mui/icons-material/FilterList";
+
+const TestUploads = () => {
+  const [uploads, setUploads] = useState([]);
+  const [hostels, setHostels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openDetailView, setOpenDetailView] = useState(false);
+  const [currentStudent, setCurrentStudent] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [hostelFilter, setHostelFilter] = useState("all");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch students
+        const studentsResponse = await fetch(
+          "http://localhost:3000/api/students"
+        );
+        if (!studentsResponse.ok) throw new Error("Failed to fetch students");
+        const studentsData = await studentsResponse.json();
+        setUploads(studentsData);
+
+        // Fetch hostels
+        const hostelsResponse = await fetch(
+          "http://localhost:3000/api/hostels"
+        );
+        if (!hostelsResponse.ok) throw new Error("Failed to fetch hostels");
+        const hostelsData = await hostelsResponse.json();
+        setHostels(hostelsData);
+      } catch (err) {
+        setError(err.message);
+        setSnackbarOpen(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredUploads = uploads.filter((upload) => {
+    const matchesSearch =
+      upload.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      upload.regNo.includes(searchQuery);
+
+    const matchesHostel =
+      hostelFilter === "all" || upload.hostel === hostelFilter;
+
+    return matchesSearch && matchesHostel;
+  });
+
+  // Count students per hostel
+  const countStudentsByHostel = () => {
+    const counts = {};
+    uploads.forEach((student) => {
+      counts[student.hostel] = (counts[student.hostel] || 0) + 1;
+    });
+    return counts;
+  };
+
+  const hostelCounts = countStudentsByHostel();
+
+  const handleEditClick = (student) => {
+    setCurrentStudent(student);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setCurrentStudent(null);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/students/${currentStudent._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(currentStudent),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to update student");
+
+      const updatedStudent = await response.json();
+
+      setUploads((prevUploads) =>
+        prevUploads.map((upload) =>
+          upload._id === currentStudent._id ? updatedStudent : upload
+        )
+      );
+
+      handleCloseDialog();
+      setSnackbarOpen(true);
+    } catch (err) {
+      setError(err.message);
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleDelete = async (studentId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this student?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/students/${studentId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete student");
+
+      setUploads((prevUploads) =>
+        prevUploads.filter((upload) => upload._id !== studentId)
+      );
+      setSnackbarOpen(true);
+    } catch (err) {
+      setError(err.message);
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleViewDetails = (student) => {
+    setCurrentStudent(student);
+    setOpenDetailView(true);
+  };
+
+  const handleCloseDetailView = () => {
+    setOpenDetailView(false);
+    setCurrentStudent(null);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  return (
+    <Box sx={{ maxWidth: 1000, margin: "auto", mt: 0 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            fontSize: "2rem",
+            color: "#333",
+            letterSpacing: "0.5px",
+            lineHeight: 1.3,
+            marginBottom: "1.5rem",
+          }}
+        >
+          Students
+        </Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <FormControl sx={{ minWidth: 180 }} size="small">
+            <InputLabel id="hostel-filter-label">
+              <Box display="flex" alignItems="center">
+                <FilterListIcon sx={{ mr: 1 }} />
+                Filter by Hostel
+              </Box>
+            </InputLabel>
+            <Select
+              labelId="hostel-filter-label"
+              value={hostelFilter}
+              onChange={(e) => setHostelFilter(e.target.value)}
+              label="Filter by Hostel"
+              sx={{
+                borderRadius: 2,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: colors.primary,
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: colors.primary,
+                },
+              }}
+            >
+              <MenuItem value="all">All Hostels</MenuItem>
+              {hostels.map((hostel) => (
+                <MenuItem key={hostel._id} value={hostel.name}>
+                  {hostel.name} ({hostelCounts[hostel.name] || 0})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <TextField
+            variant="outlined"
+            placeholder="Search by name or reg no..."
+            size="small"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              width: "250px",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: colors.primary,
+                  borderWidth: "1.5px",
+                },
+                "&:hover fieldset": {
+                  borderColor: "darkred",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: colors.primary,
+                  borderWidth: "3px",
+                },
+              },
+              "& input": {
+                color: "black",
+              },
+            }}
+          />
+        </Box>
+      </Box>
+
+      {/* Hostel Filter Indicator */}
+      {hostelFilter !== "all" && (
+        <Box sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
+          <Chip
+            label={`Showing students from: ${hostelFilter}`}
+            color="black"
+            onDelete={() => setHostelFilter("all")}
+            deleteIcon={<FilterListIcon />}
+            sx={{ fontWeight: "bold" }}
+          />
+          <Typography variant="body2" color="text.secondary">
+            ({filteredUploads.length} students)
+          </Typography>
+        </Box>
+      )}
+
+      {loading ? (
+        <Grid container spacing={2}>
+          {[1, 2, 3].map((index) => (
+            <Grid item xs={12} key={index}>
+              <Skeleton variant="rectangular" height={100} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : error ? (
+        <Typography color="error" sx={{ mt: 4 }}>
+          {error}
+        </Typography>
+      ) : (
+        <Grid container spacing={2}>
+          <AnimatePresence>
+            {filteredUploads.map((upload) => (
+              <Grid item xs={12} key={upload._id}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Card
+                    variant="outlined"
+                    sx={{
+                      mb: 0,
+                      borderRadius: 2,
+                      boxShadow: 3,
+                      display: "flex",
+                      background: "linear-gradient(145deg, #f3f4f6, #e5e7eb)",
+                      borderLeft: "10px solid #6e2026",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        boxShadow: 6,
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ flex: 1 }}>
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Box>
+                          <Typography variant="body1">
+                            <b>Reg. No:</b> {upload.regNo} &nbsp; <b>Name:</b>{" "}
+                            {upload.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            <HotelIcon fontSize="small" sx={{ mr: 0.5 }} />
+                            {upload.hostel}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <IconButton
+                            onClick={() => handleDelete(upload._id)}
+                            sx={{ color: colors.primary }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleEditClick(upload)}
+                            sx={{ color: colors.primary }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <Button
+                            variant="outlined"
+                            style={{
+                              borderColor: colors.primary,
+                              color: colors.secondary,
+                            }}
+                            onClick={() => handleViewDetails(upload)}
+                            sx={{ ml: 1 }}
+                          >
+                            View Details
+                          </Button>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </AnimatePresence>
+        </Grid>
+      )}
+
+      {/* Edit Student Dialog */}
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
+        <DialogTitle>Edit Student Details</DialogTitle>
+        <DialogContent>
+          {currentStudent && (
+            <Box
+              component="table"
+              sx={{ width: "100%", borderCollapse: "collapse" }}
+            >
+              <tbody>
+                {[
+                  { label: "Name", value: "name", icon: <PersonIcon /> },
+                  {
+                    label: "Registration No",
+                    value: "regNo",
+                    icon: <SchoolIcon />,
+                  },
+                  { label: "Gender", value: "gender", icon: <PersonIcon /> },
+                  {
+                    label: "Registering Year",
+                    value: "registeringYear",
+                    icon: <DateRangeIcon />,
+                  },
+                  {
+                    label: "Hostel",
+                    value: "hostel",
+                    icon: <HotelIcon />,
+                    select: true,
+                    options: hostels.map((h) => h.name),
+                  },
+                  {
+                    label: "Faculty",
+                    value: "faculty",
+                    icon: <AccountBalanceIcon />,
+                  },
+                  {
+                    label: "Department",
+                    value: "department",
+                    icon: <SchoolIcon />,
+                  },
+                  {
+                    label: "Address",
+                    value: "address",
+                    icon: <LocationOnIcon />,
+                  },
+                  {
+                    label: "Contact No",
+                    value: "contactNo",
+                    icon: <PhoneIcon />,
+                  },
+                  { label: "Email", value: "email", icon: <EmailIcon /> },
+                  {
+                    label: "Parent Contact No",
+                    value: "parentNo",
+                    icon: <PhoneIcon />,
+                  },
+                ].map(({ label, value, icon, select, options }) => (
+                  <tr key={value}>
+                    <td
+                      style={{
+                        padding: "8px",
+                        fontWeight: "bold",
+                        borderBottom: "1px solid #ddd",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {icon && <Box sx={{ mr: 1 }}>{icon}</Box>} {label}:
+                    </td>
+                    <td
+                      style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
+                    >
+                      {select ? (
+                        <FormControl fullWidth size="small">
+                          <Select
+                            value={currentStudent[value]}
+                            onChange={(e) =>
+                              setCurrentStudent({
+                                ...currentStudent,
+                                [value]: e.target.value,
+                              })
+                            }
+                          >
+                            {options.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      ) : (
+                        <TextField
+                          fullWidth
+                          value={currentStudent[value]}
+                          onChange={(e) =>
+                            setCurrentStudent({
+                              ...currentStudent,
+                              [value]: e.target.value,
+                            })
+                          }
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdate} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Student Details Dialog */}
+      <Dialog
+        open={openDetailView}
+        onClose={handleCloseDetailView}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Full Student Details</DialogTitle>
+        <DialogContent>
+          {currentStudent && (
+            <Box
+              sx={{ overflowY: "auto", height: "400px", position: "relative" }}
+            >
+              {currentStudent.image && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 16,
+                    right: 16,
+                    width: "150px",
+                    height: "150px",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    boxShadow: 3,
+                  }}
+                >
+                  <img
+                    src={`http://localhost:3000/${currentStudent.image}`}
+                    alt="Student"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              )}
+
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Reg. No: {currentStudent.regNo}
+              </Typography>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: 2,
+                }}
+              >
+                {[
+                  {
+                    label: "Name",
+                    value: currentStudent.name,
+                    icon: <PersonIcon />,
+                  },
+                  {
+                    label: "Gender",
+                    value: currentStudent.gender,
+                    icon: <WcIcon />,
+                  },
+                  {
+                    label: "Hostel",
+                    value: currentStudent.hostel,
+                    icon: <HotelIcon />,
+                  },
+                  {
+                    label: "Faculty",
+                    value: currentStudent.faculty,
+                    icon: <AccountBalanceIcon />,
+                  },
+                  {
+                    label: "Department",
+                    value: currentStudent.department,
+                    icon: <SchoolIcon />,
+                  },
+                  {
+                    label: "Contact No",
+                    value: currentStudent.contactNo,
+                    icon: <PhoneIcon />,
+                  },
+                  {
+                    label: "Email",
+                    value: currentStudent.email,
+                    icon: <EmailIcon />,
+                  },
+                  {
+                    label: "Parent Contact No",
+                    value: currentStudent.parentNo,
+                    icon: <PhoneIcon />,
+                  },
+                  {
+                    label: "Address",
+                    value: currentStudent.address,
+                    icon: <LocationOnIcon />,
+                  },
+                  {
+                    label: "Registering Year",
+                    value: `Year ${currentStudent.registeringYear}`,
+                    icon: <DateRangeIcon />,
+                  },
+                ].map(({ label, value, icon }) => (
+                  <Box key={label}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {icon && <Box sx={{ mr: 1 }}>{icon}</Box>} {label}:
+                    </Typography>
+                    <Typography variant="body1">{value}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDetailView} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}

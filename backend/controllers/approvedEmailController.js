@@ -1,5 +1,6 @@
 const ApprovedEmail = require("../models/approvedEmailModel");
 const mongoose = require("mongoose");
+const User = require("../models/userModel");
 
 // Get all emails
 const getApprovedEmails = async (req, res) => {
@@ -35,6 +36,7 @@ const createApprovedEmail = async (req, res) => {
 };
 
 // Delete a email
+/*04.22
 const deleteApprovedEmail = async (req, res) => {
   const { id } = req.params;
 
@@ -47,6 +49,39 @@ const deleteApprovedEmail = async (req, res) => {
     return res.status(404).json({ error: "No such email" });
   }
   res.status(200).json(approvedEmail);
+};*/
+const deleteApprovedEmail = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such email" });
+  }
+
+  try {
+    // First find the approved email to get the email address
+    const approvedEmail = await ApprovedEmail.findById(id);
+    if (!approvedEmail) {
+      return res.status(404).json({ error: "No such email" });
+    }
+
+    // Delete any user associated with this email
+    const deletedUser = await User.findOneAndDelete({
+      email: approvedEmail.email,
+    });
+
+    // Now delete the approved email
+    await ApprovedEmail.findOneAndDelete({ _id: id });
+
+    res.status(200).json({
+      approvedEmail,
+      deletedUser: deletedUser ? true : false,
+      message: deletedUser
+        ? "Approved email and associated user account deleted successfully"
+        : "Approved email deleted successfully (no user account found)",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // Update a email

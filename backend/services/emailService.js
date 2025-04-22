@@ -10,7 +10,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/*
 function sendMail(to, sub, msg) {
   transporter.sendMail({
     to: to,
@@ -19,8 +18,9 @@ function sendMail(to, sub, msg) {
   });
 }
 
-module.exports = { sendMail };*/
+module.exports = { sendMail };
 
+/*
 function sendMail(to, sub, msg) {
   try {
     await;
@@ -34,4 +34,4 @@ function sendMail(to, sub, msg) {
   }
 }
 
-module.exports = { sendMail };
+module.exports = { sendMail };*/
