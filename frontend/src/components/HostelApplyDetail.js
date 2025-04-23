@@ -1939,6 +1939,11 @@ const TestUploads = () => {
                             value={`${upload.address}, ${upload.city}, ${upload.district}`}
                           />
                           <DetailItem
+                            icon={<School fontSize="small" />}
+                            label="Distance from Home (km)"
+                            value={upload.distance}
+                          />
+                          <DetailItem
                             icon={<AttachMoney fontSize="small" />}
                             label="Family Income (LKR)"
                             value={upload.income}
@@ -1976,12 +1981,6 @@ const TestUploads = () => {
                             icon={<School fontSize="small" />}
                             label="Department"
                             value={upload.department}
-                          />
-
-                          <DetailItem
-                            icon={<School fontSize="small" />}
-                            label="Distance from Home (km)"
-                            value={upload.distance}
                           />
                         </Paper>
                       </Grid>
